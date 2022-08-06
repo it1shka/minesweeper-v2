@@ -1,0 +1,79 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: sans-serif;
+}
+
+.main-wrapper {
+  min-height: 100vh;
+  background: url('/assets/background.png'), no-repeat center center fixed;
+  background-size: cover;
+
+  display: grid;
+  place-items: center;
+}
+
+@mixin box {
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: purple 1px 1px 3px;
+}
+
+.error-widget {
+  @include box;
+  padding: 2em 3em;
+  max-width: 460px;
+  text-align: center;
+  & > * + * { margin-top: 0.4em; }
+
+  h2 { font-style: italic; }
+}
+
+$cell-size: 20px;
+.minesweeper-wrapper {
+  @include box;
+  padding: 1em;
+  display: grid;
+  gap: 1px;
+
+  div {
+    height: $cell-size;
+    width: $cell-size;
+    background-color: #ebebeb;
+  }
+}
+
+@mixin colorfulCell($color) {
+  background-color: $color;
+  transition: 0.1s background-color;
+  &:hover {
+    background-color: darken($color, 15%);
+  }
+}
+
+$fog: #ebebeb;
+$empty: #d6c8c8;
+$flag: #299b29;
+$bomb: #ca4646;
+
+.minesweeper-wrapper {
+  .fog {
+    @include colorfulCell($fog);
+  }
+  
+  .empty {
+    @include colorfulCell($empty);
+  }
+  
+  .flag {
+    @include colorfulCell($flag);
+  }
+  
+  .bomb {
+    @include colorfulCell($bomb);
+  }
+}

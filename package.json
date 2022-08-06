@@ -1,0 +1,17 @@
+{
+  "name": "minesweeper-v2",
+  "version": "1.0.0",
+  "description": "Minesweeper game written in JS",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "it1shka",
+  "license": "MIT",
+  "engines": {
+    "node": "14.x"
+  },
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}
