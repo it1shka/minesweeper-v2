@@ -7,7 +7,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { delay, initMatrix, nearest, randomElements, removeRandom } from "./utils.js";
+import { delay, initMatrix, nearest, randomElements, randomIntUpto, removeRandom } from "./utils.js";
 export function createBoardLayer(root, size) {
     const tmpl = `repeat(${size}, 1fr)`;
     root.style.gridTemplateRows = tmpl;
@@ -94,6 +94,11 @@ export class Board {
         return "IN_PROCESS" /* IN_PROCESS */;
     }
     revealMap() {
+        if (this.firstTouch) {
+            const pos = [randomIntUpto(this.size), randomIntUpto(this.size)];
+            this.randomizeMap(pos);
+            this.firstTouch = false;
+        }
         const rest = [];
         for (let row = 0; row < this.size; row++) {
             for (let col = 0; col < this.size; col++) {

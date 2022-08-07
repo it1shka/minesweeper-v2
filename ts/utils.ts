@@ -23,13 +23,14 @@ export function nearest([row, col]: Position) {
   return output
 }
 
+export function randomIntUpto(max: number) {
+  return Math.floor(max * Math.random())
+}
+
 export function randomElements<T>(array: T[], amount = 1) {
   const notChosenIdxs = array.map((_, idx) => idx)
   const chosenIdxs = []
   for(let i = 0; i < amount && notChosenIdxs.length > 0; i++) {
-    // const index = Math.floor(notChosenIdxs.length * Math.random())
-    // chosenIdxs.push(notChosenIdxs[index])
-    // notChosenIdxs.splice(index, 1)
     const chosen = removeRandom(notChosenIdxs)
     chosenIdxs.push(chosen)
   }
@@ -37,7 +38,7 @@ export function randomElements<T>(array: T[], amount = 1) {
 }
 
 export function removeRandom<T>(array: T[]) {
-  const index = Math.floor(array.length * Math.random())
+  const index = randomIntUpto(array.length)
   const value = array[index]
   array.splice(index, 1)
   return value

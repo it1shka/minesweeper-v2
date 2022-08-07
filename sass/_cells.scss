@@ -1,0 +1,30 @@
+@mixin colorfulCell($color) {
+  background-color: $color;
+  transition: 0.1s background-color;
+  &:hover {
+    background-color: darken($color, 15%);
+  }
+}
+
+$fog: #ebebeb;
+$empty: #d6c8c8;
+$flag: #299b29;
+$bomb: #ca4646;
+
+.minesweeper-wrapper {
+  .fog {
+    @include colorfulCell($fog);
+  }
+  
+  .empty {
+    @include colorfulCell($empty);
+  }
+  
+  .flag {
+    @include colorfulCell($flag);
+  }
+  
+  .bomb {
+    @include colorfulCell($bomb);
+  }
+}

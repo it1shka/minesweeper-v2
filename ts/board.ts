@@ -1,5 +1,5 @@
 import { GameState } from "./game.js"
-import { delay, initMatrix, nearest, posEq, randomElements, removeRandom } from "./utils.js"
+import { delay, initMatrix, nearest, posEq, randomElements, randomIntUpto, removeRandom } from "./utils.js"
 
 export type BoardLayer = HTMLElement[][]
 
@@ -112,6 +112,12 @@ export class Board {
   }
 
   public revealMap() {
+    if(this.firstTouch) {
+      const pos: Position = [randomIntUpto(this.size), randomIntUpto(this.size)]
+      this.randomizeMap(pos)
+      this.firstTouch = false
+    }
+
     const rest: Position[] = []
     for(let row = 0; row < this.size; row++) {
       for(let col = 0; col < this.size; col++) {

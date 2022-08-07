@@ -1,12 +1,14 @@
 import { Board, createBoardLayer } from "./board.js";
+import { createClock } from "./interface.js";
 export default class Game {
-    constructor(root, boardSize, bombsAmount, timeout) {
+    constructor(root, boardSize, bombsAmount, timeoutSeconds) {
         this._state = "IN_PROCESS" /* IN_PROCESS */;
+        createClock(timeoutSeconds);
         setTimeout(() => {
             if (this.state === "IN_PROCESS" /* IN_PROCESS */) {
                 this.state = "LOSS" /* LOSS */;
             }
-        }, timeout);
+        }, timeoutSeconds * 1000);
         this.layer = createBoardLayer(root, boardSize);
         this.board = new Board(boardSize, bombsAmount, this.layer);
         for (let row = 0; row < boardSize; row++) {

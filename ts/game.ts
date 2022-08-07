@@ -1,4 +1,5 @@
 import { Board, BoardLayer, createBoardLayer, Position } from "./board.js";
+import { createClock } from "./interface.js";
 
 export const enum GameState {
   IN_PROCESS = 'IN_PROCESS',
@@ -30,13 +31,14 @@ export default class Game {
     root: HTMLElement,
     boardSize: number,
     bombsAmount: number,
-    timeout: number,
+    timeoutSeconds: number,
   ) {
+    createClock(timeoutSeconds)
     setTimeout(() => {
       if(this.state === GameState.IN_PROCESS) {
         this.state = GameState.LOSS
       }
-    }, timeout)
+    }, timeoutSeconds * 1000)
 
     this.layer = createBoardLayer(root, boardSize)
     this.board = new Board(boardSize, bombsAmount, this.layer)
