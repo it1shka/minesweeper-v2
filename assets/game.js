@@ -1,10 +1,10 @@
 import { Board, createBoardLayer } from "./board.js";
-import { createClock } from "./interface.js";
+import { createClock, setGameStatus } from "./interface.js";
 export default class Game {
     constructor(root, boardSize, bombsAmount, timeoutSeconds) {
         this._state = "IN_PROCESS" /* IN_PROCESS */;
-        createClock(timeoutSeconds);
-        setTimeout(() => {
+        this.clockIntervalHandler = createClock(timeoutSeconds);
+        this.gameoverTimeoutHandler = setTimeout(() => {
             if (this.state === "IN_PROCESS" /* IN_PROCESS */) {
                 this.state = "LOSS" /* LOSS */;
             }
@@ -19,6 +19,7 @@ export default class Game {
                 cell.oncontextmenu = evt => this.clickBoard(evt, 'right', pos);
             }
         }
+        setGameStatus('Active 🥸');
     }
     get state() {
         return this._state;
@@ -30,8 +31,14 @@ export default class Game {
         // do smth on game end
         // CONTINUE...
         this.board.revealMap();
+        const status = value === "LOSS" /* LOSS */
+            ? 'Loss 🔥'
+            : 'Win 😎';
+        setGameStatus(status);
     }
     cleanup() {
+        clearInterval(this.clockIntervalHandler);
+        clearTimeout(this.gameoverTimeoutHandler);
         for (const row of this.layer) {
             for (const elem of row) {
                 elem.remove();

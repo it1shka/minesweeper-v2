@@ -1,5 +1,5 @@
 import { Board, BoardLayer, createBoardLayer, Position } from "./board.js";
-import { createClock } from "./interface.js";
+import { createClock, setGameStatus } from "./interface.js";
 
 export const enum GameState {
   IN_PROCESS = 'IN_PROCESS',
@@ -22,10 +22,16 @@ export default class Game {
     // do smth on game end
     // CONTINUE...
     this.board.revealMap()
+    const status = value === GameState.LOSS
+      ? 'Loss 🔥'
+      : 'Win 😎'
+    setGameStatus(status)
   }
 
   private board: Board
   private layer: BoardLayer
+  private clockIntervalHandler: number
+  private gameoverTimeoutHandler: number
 
   constructor(
     root: HTMLElement,
@@ -33,8 +39,8 @@ export default class Game {
     bombsAmount: number,
     timeoutSeconds: number,
   ) {
-    createClock(timeoutSeconds)
-    setTimeout(() => {
+    this.clockIntervalHandler = createClock(timeoutSeconds)
+    this.gameoverTimeoutHandler = setTimeout(() => {
       if(this.state === GameState.IN_PROCESS) {
         this.state = GameState.LOSS
       }
@@ -51,9 +57,13 @@ export default class Game {
         cell.oncontextmenu = evt => this.clickBoard(evt, 'right', pos)
       }
     }
+
+    setGameStatus('Active 🥸')
   }
 
   public cleanup() {
+    clearInterval(this.clockIntervalHandler)
+    clearTimeout(this.gameoverTimeoutHandler)
     for(const row of this.layer) {
       for(const elem of row) {
         elem.remove()

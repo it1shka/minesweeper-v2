@@ -16,4 +16,10 @@ export function createClock(timeout: number) {
     }
     clock.innerText = fmtime(currentTime)
   }, 1000)
+  return interval
+}
+
+const statusElement = document.getElementById('status')!
+export function setGameStatus(status: string) {
+  statusElement.innerText = status
 }

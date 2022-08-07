@@ -40,11 +40,23 @@ $cell-size: 20px;
   }
 }
 
-.clock {
+@mixin aside($color) {
   @include box;
   position: absolute;
-  bottom: calc(100% + 0.2em);
   padding: 0.2em 0.5em;
-  background-color: #e665e6;
+  background-color: $color;
   color: white;
+}
+
+$clock-color: #e665e6;
+.clock {
+  @include aside($clock-color);
+  bottom: calc(100% + 0.2em);
+}
+
+$status-color: #c240c2;
+.status {
+  @include aside($status-color);
+  top: calc(100% + 0.2em);
+  right: 0;
 }

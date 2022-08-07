@@ -15,4 +15,9 @@ export function createClock(timeout) {
         }
         clock.innerText = fmtime(currentTime);
     }, 1000);
+    return interval;
+}
+const statusElement = document.getElementById('status');
+export function setGameStatus(status) {
+    statusElement.innerText = status;
 }
