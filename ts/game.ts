@@ -20,6 +20,7 @@ export default class Game {
       return
     // do smth on game end
     // CONTINUE...
+    this.board.revealMap()
   }
 
   private board: Board

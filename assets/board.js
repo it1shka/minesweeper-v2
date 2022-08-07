@@ -36,36 +36,32 @@ export class Board {
         this.fog = initMatrix(true, size);
     }
     defuse(position) {
-        return __awaiter(this, void 0, void 0, function* () {
-            if (this.firstTouch) {
-                this.randomizeMap(position);
-                this.firstTouch = false;
-            }
-            this.reveal(position);
-            // not bfs or even dfs -- just a random stuff
-            const visited = initMatrix(false, this.size);
-            visited[position[0]][position[1]] = true;
-            const container = [position];
-            while (container.length > 0) {
-                // const current = queue.shift()!
-                // const current = container.pop()!
-                const current = removeRandom(container);
-                const [row, col] = current;
-                if (this.countmap[row][col] > 0 ||
-                    this.bombmap[row][col] ||
-                    this.flagmap[row][col])
+        if (this.firstTouch) {
+            this.randomizeMap(position);
+            this.firstTouch = false;
+        }
+        this.reveal(position);
+        const visited = initMatrix(false, this.size);
+        visited[position[0]][position[1]] = true;
+        const container = [position];
+        const toReveal = [];
+        while (container.length > 0) {
+            const current = container.pop();
+            const [row, col] = current;
+            if (this.countmap[row][col] > 0 ||
+                this.bombmap[row][col] ||
+                this.flagmap[row][col])
+                continue;
+            for (const pos of nearest(current)) {
+                const [r, c] = pos;
+                if (!this.validPos(pos) || visited[r][c])
                     continue;
-                for (const pos of nearest(current)) {
-                    const [r, c] = pos;
-                    if (!this.validPos(pos) || visited[r][c])
-                        continue;
-                    yield delay(6);
-                    visited[r][c] = true;
-                    this.reveal(pos);
-                    container.push(pos);
-                }
+                visited[r][c] = true;
+                toReveal.push(pos);
+                container.push(pos);
             }
-        });
+        }
+        this.revealPositions(toReveal);
     }
     toggleFlag([row, col]) {
         if (this.firstTouch || !this.fog[row][col])
@@ -96,6 +92,25 @@ export class Board {
         if (openedWithoutBombs + bombs === this.size ** 2)
             return "WIN" /* WIN */;
         return "IN_PROCESS" /* IN_PROCESS */;
+    }
+    revealMap() {
+        const rest = [];
+        for (let row = 0; row < this.size; row++) {
+            for (let col = 0; col < this.size; col++) {
+                if (this.fog[row][col])
+                    rest.push([row, col]);
+            }
+        }
+        this.revealPositions(rest);
+    }
+    revealPositions(positions) {
+        return __awaiter(this, void 0, void 0, function* () {
+            while (positions.length > 0) {
+                yield delay(2);
+                const pos = removeRandom(positions);
+                this.reveal(pos);
+            }
+        });
     }
     randomizeMap(touch) {
         const maybeBombs = [];

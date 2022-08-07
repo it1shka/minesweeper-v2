@@ -49,22 +49,21 @@ export class Board {
     this.fog = initMatrix(true, size)
   }
 
-  public async defuse(position: Position) {
+  public defuse(position: Position) {
     if(this.firstTouch) {
       this.randomizeMap(position)
       this.firstTouch = false
     }
     this.reveal(position)
     
-    // not bfs or even dfs -- just a random stuff
     const visited = initMatrix(false, this.size)
     visited[position[0]][position[1]] = true
     const container: Position[] = [position]
+    
+    const toReveal: Position[] = []
 
     while(container.length > 0) {
-      // const current = queue.shift()!
-      // const current = container.pop()!
-      const current = removeRandom(container)
+      const current = container.pop()!
       const [row, col] = current
       if(this.countmap[row][col] > 0 || 
         this.bombmap[row][col] || 
@@ -73,12 +72,13 @@ export class Board {
       for(const pos of nearest(current)) {
         const [r, c] = pos
         if(!this.validPos(pos) || visited[r][c]) continue
-        await delay(6)
         visited[r][c] = true
-        this.reveal(pos)
+        toReveal.push(pos)
         container.push(pos)
       }
     }
+
+    this.revealPositions(toReveal)
   }
 
   public toggleFlag([row, col]: Position) {
@@ -109,6 +109,24 @@ export class Board {
     if(bombs === matchedFlags) return GameState.WIN
     if(openedWithoutBombs + bombs === this.size ** 2) return GameState.WIN
     return GameState.IN_PROCESS
+  }
+
+  public revealMap() {
+    const rest: Position[] = []
+    for(let row = 0; row < this.size; row++) {
+      for(let col = 0; col < this.size; col++) {
+        if(this.fog[row][col]) rest.push([row, col])
+      }
+    }
+    this.revealPositions(rest)
+  }
+
+  private async revealPositions(positions: Position[]) {
+    while(positions.length > 0) {
+      await delay(2);
+      const pos = removeRandom(positions)
+      this.reveal(pos)
+    }
   }
 
   private randomizeMap(touch: Position) {
