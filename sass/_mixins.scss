@@ -1,0 +1,30 @@
+@mixin box {
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: purple 1px 1px 3px;
+}
+
+@mixin aside($color) {
+  @include box;
+  position: absolute;
+  padding: 0.2em 0.5em;
+  background-color: $color;
+  color: white;
+}
+
+@mixin fancyButton {
+  padding: 0.5em 1em;
+  border: none;
+  background-color: #df78df;
+  border-radius: 0 15px 0 15px;
+  color: white;
+  cursor: pointer;
+
+  transition: 0.1s all;
+  transition-property: background-color, transform;
+
+  &:hover {
+    background-color: #a100a1;
+    transform: scale(1.03);
+  }
+}

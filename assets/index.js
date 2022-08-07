@@ -1,3 +1,10 @@
+import './interface.js';
 import Game from './game.js';
+import { startForm } from './interface.js';
 const root = document.getElementById('minesweeper');
-const game = new Game(root, 15, 30, 10);
+document.getElementById('new-game-form')
+    .addEventListener('submit', event => {
+    event.preventDefault();
+    const { boardSize, bombsAmount, timeout } = startForm;
+    new Game(root, boardSize, bombsAmount, timeout);
+});

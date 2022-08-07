@@ -12,12 +12,53 @@
 
   <div class="main-wrapper">
 
-    <div class="minesweeper-wrapper" id="minesweeper">
+    <form class="new-game-form" id="new-game-form">
+      <h2>Start new game 👹 </h2>
+
+      <div>
+        <label>Board size:</label>
+        <input required value="10" id="boardsize_inp"
+          placeholder="Board size: "
+          type="number"
+          min="5" max="30" step="1"
+        >
+      </div>
+
+      <div>
+        <label>Bombs amount: </label>
+        <input required value="10" id="bombsamount_inp"
+          placeholder="Bombs: "
+          type="number"
+          min="3" max="50" step="1"
+        >
+      </div>
+
+      <div>
+        <label>Timeout: </label>
+        <input required value="180" id="timeout_inp"
+          placeholder="Time(seconds): "
+          type="number"
+          min="60" max="1200" step="1"
+        >
+      </div>
+
+      <button type="submit">Start!</button>
+    </form>
+
+    <div style="display: none;" class="minesweeper-wrapper" id="minesweeper">
       <aside class="clock" id="clock"></aside>
       <aside class="status" id="status"></aside>
     </div>
 
+    <div class="game-menu-wrapper" id="menu">
+      <div class="menu">
+        <button id="menu__start">Start new game! ☠️</button>
+        <a id="menu__rules" href="/rules">Rules 🧐</a>
+        <button id="menu__close">Close menu 👿</button>
+      </div>
+    </div>
 
+    <button id="open-menu">Menu</button>
   </div>
 </body>
 </html>

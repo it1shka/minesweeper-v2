@@ -1,5 +1,5 @@
 import { Board, BoardLayer, createBoardLayer, Position } from "./board.js";
-import { createClock, setGameStatus } from "./interface.js";
+import { clock, Status, statusBar } from "./interface.js";
 
 export const enum GameState {
   IN_PROCESS = 'IN_PROCESS',
@@ -19,32 +19,27 @@ export default class Game {
     this._state = value
     if(this._state === GameState.IN_PROCESS)
       return
+    
     // do smth on game end
-    // CONTINUE...
+    clearTimeout(this.gameoverTimeoutHandler)
     this.board.revealMap()
     const status = value === GameState.LOSS
-      ? 'Loss 🔥'
-      : 'Win 😎'
-    setGameStatus(status)
+      ? Status.LOSS
+      : Status.WIN
+    statusBar.status = status
   }
 
   private board: Board
   private layer: BoardLayer
-  private clockIntervalHandler: number
+  
   private gameoverTimeoutHandler: number
 
   constructor(
-    root: HTMLElement,
+    private readonly root: HTMLElement,
     boardSize: number,
     bombsAmount: number,
     timeoutSeconds: number,
   ) {
-    this.clockIntervalHandler = createClock(timeoutSeconds)
-    this.gameoverTimeoutHandler = setTimeout(() => {
-      if(this.state === GameState.IN_PROCESS) {
-        this.state = GameState.LOSS
-      }
-    }, timeoutSeconds * 1000)
 
     this.layer = createBoardLayer(root, boardSize)
     this.board = new Board(boardSize, bombsAmount, this.layer)
@@ -58,11 +53,27 @@ export default class Game {
       }
     }
 
-    setGameStatus('Active 🥸')
+    root.style.display = 'grid'
+
+    clock.start(timeoutSeconds)
+    this.gameoverTimeoutHandler = setTimeout(() => {
+      if(this.state === GameState.IN_PROCESS) {
+        this.state = GameState.LOSS
+      }
+    }, timeoutSeconds * 1000)
+    
+    statusBar.status = Status.IN_PROCESS
+
+    const newGameBtn = document.getElementById('menu__start')!
+    const handler = () => {
+      this.cleanup()
+      newGameBtn.removeEventListener('click', handler)
+    }
+    newGameBtn.addEventListener('click', handler)
   }
 
   public cleanup() {
-    clearInterval(this.clockIntervalHandler)
+    this.root.style.display = 'none'
     clearTimeout(this.gameoverTimeoutHandler)
     for(const row of this.layer) {
       for(const elem of row) {
