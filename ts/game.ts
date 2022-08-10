@@ -57,7 +57,10 @@ export default class Game {
     clock.time = timeoutSeconds
     this.paused = false
 
+    this.bindInterfaceToGame()
+  }
 
+  private bindInterfaceToGame() {
     const openMenu = document.getElementById('open-menu')!
     const closeMenu = document.getElementById('menu__close')!
 

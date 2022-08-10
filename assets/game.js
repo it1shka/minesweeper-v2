@@ -20,21 +20,7 @@ export default class Game {
         statusBar.status = "Active \uD83E\uDD78" /* IN_PROCESS */;
         clock.time = timeoutSeconds;
         this.paused = false;
-        const openMenu = document.getElementById('open-menu');
-        const closeMenu = document.getElementById('menu__close');
-        this.togglePause = this.togglePause.bind(this);
-        [openMenu, closeMenu].forEach(btn => {
-            btn.addEventListener('click', this.togglePause);
-        });
-        const newGameBtn = document.getElementById('menu__start');
-        const handler = () => {
-            this.cleanup();
-            newGameBtn.removeEventListener('click', handler);
-            [openMenu, closeMenu].forEach(btn => {
-                btn.removeEventListener('click', this.togglePause);
-            });
-        };
-        newGameBtn.addEventListener('click', handler);
+        this.bindInterfaceToGame();
     }
     get state() {
         return this._state;
@@ -52,6 +38,23 @@ export default class Game {
             ? "Loss \uD83D\uDD25" /* LOSS */
             : "Win \uD83D\uDE0E" /* WIN */;
         statusBar.status = status;
+    }
+    bindInterfaceToGame() {
+        const openMenu = document.getElementById('open-menu');
+        const closeMenu = document.getElementById('menu__close');
+        this.togglePause = this.togglePause.bind(this);
+        [openMenu, closeMenu].forEach(btn => {
+            btn.addEventListener('click', this.togglePause);
+        });
+        const newGameBtn = document.getElementById('menu__start');
+        const handler = () => {
+            this.cleanup();
+            newGameBtn.removeEventListener('click', handler);
+            [openMenu, closeMenu].forEach(btn => {
+                btn.removeEventListener('click', this.togglePause);
+            });
+        };
+        newGameBtn.addEventListener('click', handler);
     }
     togglePause() {
         if (!this.gameoverTimer)
