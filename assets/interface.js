@@ -1,9 +1,11 @@
+import { Timer } from "./utils.js";
 class Clock {
     constructor() {
         this._time = 0;
         this._clock = document.getElementById('clock');
         this.time = 0;
         this.tick = this.tick.bind(this);
+        this._timer = new Timer(this.tick, 1000, true);
     }
     get time() {
         return this._time;
@@ -13,14 +15,14 @@ class Clock {
         this._clock.innerText = Clock.formatTime(value);
     }
     start(time) {
-        if (time)
+        if (time) {
             this.time = time;
-        if (this._interval)
-            this.stop();
-        this._interval = setInterval(this.tick, 1000);
+            this._timer.rewind();
+        }
+        this._timer.start();
     }
     stop() {
-        clearInterval(this._interval);
+        this._timer.stop();
     }
     tick() {
         if (this.time <= 0) {

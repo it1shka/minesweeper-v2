@@ -61,7 +61,8 @@ export class Board {
                 container.push(pos);
             }
         }
-        this.revealPositions(toReveal);
+        // this.revealPositions(toReveal)
+        return this.revealPositions(toReveal);
     }
     toggleFlag([row, col]) {
         if (this.firstTouch || !this.fog[row][col])

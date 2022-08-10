@@ -49,3 +49,59 @@ export function delay(time: number) {
     setTimeout(resolve, time)
   })
 }
+
+export class Timer {
+
+  private lastStartTime!: number
+  private elapsedTime = 0
+  private handle: number | undefined
+  private stopped = true
+
+  constructor(
+    private readonly func: Function,
+    private readonly totalTime: number,
+    private readonly repetitive = false  
+  ) {
+    this.execute = this.execute.bind(this)
+  }
+
+  private addDeltaTime() {
+    const delta = Date.now() - this.lastStartTime
+    this.elapsedTime += delta
+  }
+
+  private execute() {
+    this.stopped = true
+    this.func()
+    this.addDeltaTime()
+    if(this.repetitive) this.start()
+  }
+
+  public start() {
+    if(!this.stopped) return
+    this.stopped = false
+    this.lastStartTime = Date.now()
+
+    const timeout = this.totalTime - this.elapsedTime
+    if(timeout <= 0) {
+      this.elapsedTime = 0
+      this.handle = setTimeout(this.execute, this.totalTime)
+    } else {
+      this.handle = setTimeout(this.execute, timeout)
+    }
+  }
+
+  public stop() {
+    if(this.stopped) return
+    this.stopped = true
+
+    clearTimeout(this.handle)
+    this.addDeltaTime()
+  }
+
+  public rewind() {
+    this.stop()
+    this.elapsedTime = 0
+  }
+
+}

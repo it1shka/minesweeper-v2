@@ -1,8 +1,10 @@
+import { Timer } from "./utils.js"
+
 class Clock {
 
   private _clock: HTMLElement
   private _time: number = 0
-  private _interval: number | undefined
+  private _timer: Timer
 
   public get time() {
     return this._time
@@ -17,16 +19,19 @@ class Clock {
     this._clock = document.getElementById('clock')!
     this.time = 0
     this.tick = this.tick.bind(this)
+    this._timer = new Timer(this.tick, 1000, true)
   }
 
   public start(time?: number) {
-    if(time) this.time = time
-    if(this._interval) this.stop()
-    this._interval = setInterval(this.tick, 1000)
+    if(time) {
+      this.time = time
+      this._timer.rewind()
+    }
+    this._timer.start()
   }
 
   public stop() {
-    clearInterval(this._interval)
+    this._timer.stop()
   }
 
   private tick() {

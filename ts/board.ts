@@ -78,7 +78,8 @@ export class Board {
       }
     }
 
-    this.revealPositions(toReveal)
+    // this.revealPositions(toReveal)
+    return this.revealPositions(toReveal)
   }
 
   public toggleFlag([row, col]: Position) {
@@ -94,6 +95,7 @@ export class Board {
 
     for(let row = 0; row < this.size; row++) {
       for(let col = 0; col < this.size; col++) {
+
         if(this.bombmap[row][col]) {
           if(!this.fog[row][col]) 
             return GameState.LOSS
@@ -103,6 +105,7 @@ export class Board {
         } else if(!this.fog[row][col]) {
           openedWithoutBombs++
         }
+
       }
     }
 
