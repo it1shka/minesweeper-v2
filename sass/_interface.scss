@@ -52,8 +52,12 @@ $status-color: #c240c2;
   }
 }
 
-#open-menu {
+#open-menu, #back-to-game {
   @include mixins.fancyButton;
+
+  /* for back to game */
+  text-decoration: none;
+  
   font-size: 1em;
   position: fixed;
   bottom: 10px;
