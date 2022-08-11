@@ -202,6 +202,63 @@
   background-color: #982c2c;
 }
 
+.rules-wrapper {
+  font-size: calc(1vw + 0.5em);
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: purple 1px 1px 3px;
+  padding: 2em 3em;
+  max-width: 720px;
+  width: 100%;
+}
+@media (min-width: 35em) {
+  .rules-wrapper {
+    font-size: 1em;
+  }
+}
+.rules-wrapper * + * {
+  margin-top: 0.5em;
+}
+.rules-wrapper h1 {
+  color: purple;
+}
+.rules-wrapper p, .rules-wrapper blockquote {
+  font-size: 1.2em;
+}
+.rules-wrapper span {
+  color: #a100a1;
+}
+.rules-wrapper ul {
+  list-style-type: none;
+}
+.rules-wrapper blockquote {
+  padding: 0.5em 0em;
+}
+.rules-wrapper blockquote span {
+  cursor: pointer;
+  padding: 0.2em 0.5em;
+  border-radius: 10px;
+  background-color: #c52cc5;
+  color: white;
+  transition: 0.1s all ease-in;
+  transition-property: background-color, transform;
+}
+.rules-wrapper blockquote span:hover {
+  background-color: purple;
+  transform: scale(1.05);
+}
+.rules-wrapper blockquote li {
+  border-left: 5px solid #c52cc5;
+  padding: 0.5em 1em;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.rules-wrapper ol {
+  font-size: 1.2em;
+  padding-left: 1em;
+}
+
 * {
   margin: 0;
   padding: 0;

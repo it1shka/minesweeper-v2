@@ -1,0 +1,56 @@
+@use 'mixins';
+
+.rules-wrapper {
+  font-size: calc(1vw + 0.5em);
+  @media (min-width: 35em) {
+    font-size: 1em;
+  }
+
+  @include mixins.box;
+  padding: 2em 3em;
+  max-width: 720px;
+  width: 100%;
+
+  * + * {
+    margin-top: 0.5em;
+  }
+
+  h1 { color: purple; }
+  p, blockquote { font-size: 1.2em; }
+  span { color: #a100a1; }
+  ul { list-style-type: none; }
+
+  blockquote {
+    padding: 0.5em 0em;
+
+    span {
+      cursor: pointer;
+      padding: 0.2em 0.5em;
+      border-radius: 10px;
+      background-color: #c52cc5;
+      color: white;
+
+      transition: 0.1s all ease-in;
+      transition-property: background-color, transform;
+
+      &:hover {
+        background-color: purple;
+        transform: scale(1.05);
+      }
+    }
+
+    li {
+      border-left: 5px solid #c52cc5;
+      padding: 0.5em 1em;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+  }
+
+  ol {
+    font-size: 1.2em;
+    padding-left: 1em;
+  }
+
+}
