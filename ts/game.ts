@@ -81,7 +81,7 @@ export default class Game {
   }
 
   private togglePause() {
-    if(!this.gameoverTimer) return
+    if(!this.gameoverTimer || this.state !== GameState.IN_PROCESS) return
 
     if(this.paused) {
       clock.start()
