@@ -65,5 +65,9 @@ $cell-size: 20px;
     @include mixins.fancyButton;
     font-size: 1em;
     font-weight: bold;
+
+    &:disabled {
+      background-color: #ccc;
+    }
   }
 }

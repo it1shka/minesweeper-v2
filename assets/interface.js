@@ -89,23 +89,63 @@ class StartGameForm {
         this._boardsize = this.findInput('boardsize_inp');
         this._bombsamount = this.findInput('bombsamount_inp');
         this._timeout = this.findInput('timeout_inp');
+        this._submit = this.findSubmitButton();
+        this.setFieldValidation(this._boardsize);
+        this.setFieldValidation(this._bombsamount);
+        this.setFieldValidation(this._timeout);
     }
     get boardSize() {
-        return Number(this._boardsize.value);
+        return this._boardsize.valueAsNumber;
     }
     get bombsAmount() {
-        return Number(this._bombsamount.value);
+        return this._bombsamount.valueAsNumber;
     }
     get timeout() {
-        return Number(this._timeout.value);
+        return this._timeout.valueAsNumber;
     }
     findInput(id) {
-        const input = this._form
-            .querySelector(`#${id}`);
+        const input = this._form.querySelector(`#${id}`);
         if (!input) {
             throw new Error(`${id} input not found!`);
         }
         return input;
+    }
+    findSubmitButton() {
+        const submit = this._form.querySelector('button[type="submit"]');
+        if (!submit) {
+            throw new Error('Submit button not found!');
+        }
+        return submit;
+    }
+    setFieldValidation(input) {
+        var _a, _b;
+        const inputId = input.id;
+        const min = (_a = input.getAttribute('min')) !== null && _a !== void 0 ? _a : -Infinity;
+        const max = (_b = input.getAttribute('max')) !== null && _b !== void 0 ? _b : Infinity;
+        const label = this._form.querySelector(`label[for="${inputId}"]`);
+        const labelText = label === null || label === void 0 ? void 0 : label.textContent;
+        const error = (message) => {
+            if (label) {
+                label.textContent = `${labelText} (${message})`;
+            }
+            this._submit.setAttribute('disabled', 'true');
+        };
+        input.addEventListener('input', () => {
+            const value = input.value;
+            if (!/^\d+$/.test(value)) {
+                error('not a number!');
+                return;
+            }
+            const n = Number(value);
+            if (n < min || n > max) {
+                error(`not in [${min}, ${max}]`);
+                return;
+            }
+            this._submit.removeAttribute('disabled');
+            if (label) {
+                label.textContent = labelText;
+            }
+        });
     }
     open() {
         this._form.style.display = 'flex';

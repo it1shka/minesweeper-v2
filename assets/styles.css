@@ -169,6 +169,9 @@
   background-color: #a100a1;
   transform: scale(1.03);
 }
+.new-game-form button:disabled {
+  background-color: #ccc;
+}
 
 .minesweeper-wrapper .fog {
   background-color: #ebebeb;

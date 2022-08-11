@@ -113,9 +113,10 @@ export const menu = new Menu()
 class StartGameForm {
 
   private _form: HTMLFormElement
-  private _boardsize!: HTMLInputElement
-  private _bombsamount!: HTMLInputElement
-  private _timeout!: HTMLInputElement
+  private _boardsize: HTMLInputElement
+  private _bombsamount: HTMLInputElement
+  private _timeout: HTMLInputElement
+  private _submit: HTMLButtonElement
 
   constructor() {
     const formId = 'new-game-form'
@@ -132,28 +133,74 @@ class StartGameForm {
     this._boardsize = this.findInput('boardsize_inp')
     this._bombsamount = this.findInput('bombsamount_inp')
     this._timeout = this.findInput('timeout_inp')
+    this._submit = this.findSubmitButton()
+
+    this.setFieldValidation(this._boardsize)
+    this.setFieldValidation(this._bombsamount)
+    this.setFieldValidation(this._timeout)
   }
 
   public get boardSize() {
-    return Number(this._boardsize.value)
+    return this._boardsize.valueAsNumber
   }
 
   public get bombsAmount() {
-    return Number(this._bombsamount.value)
+    return this._bombsamount.valueAsNumber
   }
 
   public get timeout() {
-    return Number(this._timeout.value)
+    return this._timeout.valueAsNumber
   }
 
   private findInput(id: string) {
-    const input = this._form
-      .querySelector(`#${id}`) as
-        HTMLInputElement
+    const input = this._form.querySelector(`#${id}`)
     if(!input) {
       throw new Error(`${id} input not found!`)
     }
-    return input
+    return input as HTMLInputElement
+  }
+
+  private findSubmitButton() {
+    const submit = this._form.querySelector('button[type="submit"]')
+    if(!submit) {
+      throw new Error('Submit button not found!')
+    }
+    return submit as HTMLButtonElement
+  }
+
+  private setFieldValidation(input: HTMLInputElement) {
+    const inputId = input.id
+    const min = input.getAttribute('min') ?? -Infinity
+    const max = input.getAttribute('max') ?? Infinity
+    const label = this._form.querySelector(`label[for="${inputId}"]`)
+    const labelText = label?.textContent
+
+    const error = (message: string) => {
+      if(label) {
+        label.textContent = `${labelText} (${message})`
+      }
+      this._submit.setAttribute('disabled', 'true')
+    }
+
+    input.addEventListener('input', () => {
+      const value = input.value
+
+      if(!/^\d+$/.test(value)) {
+        error('not a number!')
+        return
+      }
+
+      const n = Number(value)
+      if(n < min || n > max) {
+        error(`not in [${min}, ${max}]`)
+        return
+      }
+
+      this._submit.removeAttribute('disabled')
+      if(label) {
+        label.textContent = labelText!
+      }
+    })
   }
 
   private open() {

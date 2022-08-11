@@ -57,7 +57,7 @@ export default class Game {
         newGameBtn.addEventListener('click', handler);
     }
     togglePause() {
-        if (!this.gameoverTimer)
+        if (!this.gameoverTimer || this.state !== "IN_PROCESS" /* IN_PROCESS */)
             return;
         if (this.paused) {
             clock.start();
